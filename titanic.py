@@ -3,6 +3,7 @@ import pandas as pd
 # cargar información
 data = pd.read_csv("titanic_data/train.csv")
 test = pd.read_csv("titanic_data/test.csv")
+test_ids = test["PassengerId"]
 # comprobando la carga de información
 print(data.head(5))
 
@@ -25,12 +26,9 @@ def clean(data):
     data.Embarked.fillna("U", inplace=True)
     return data
 
-df_data = clean(data)
+# operación limpieza
+df_data = clean(data) 
 df_test = clean(test)
-
-print(df_data.head(10))
-
-
 
 # more info https://scikit-learn.org/stable/user_guide.html
 # sklearn guide user manual - machine learning
@@ -44,4 +42,28 @@ for col in cols:
     df_test[col] = le.transform(df_test[col])
     print(le.classes_)
 
+# comprobando la limpieza de la información
 print(df_data.head(10))
+
+# Librerías para el inicio de modelo de regresión lineal
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+y = df_data["Survived"]
+X = df_data.drop("Survived", axis=1)
+
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+clf = LogisticRegression(random_state=0, max_iter=1000).fit(X_train, y_train)
+
+predictions = clf.predict(X_val)
+from sklearn.metrics import accuracy_score
+A_score = accuracy_score(y_val, predictions)
+print("Accurasy score: ", A_score)
+
+submission_preds = clf.predict(df_test)
+df = pd.DataFrame({"PassengerID": test_ids.values,
+                   "Survived": submission_preds, })
+
+df.to_csv("submission.csv", index=False)
+
+print(df)
