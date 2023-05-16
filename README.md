@@ -19,3 +19,6 @@ Dentro de las operaciones realizadas se encuentran:
 	- La asignación para la columna "Sex" es la siguiente: `["Female","Male"] => ["0","1"]`
 	- La asignación para la columna "Embarked" es la siguiente: `["C","Q","S","U"] =>["0","1","2","3"]`
 - Data frame limpio y listo para usar. Se imprime para su comprobación.
+- Utiliza el modelo de regresion logística.
+- Se preapara y separa la información para el modelo utilizando el dataframe `df_data`y `df_test`.
+- La respuesta o las predicciones se guardan en el archivo *submission.csv* el cual contiene el Id del pasagero y la predicción de si murio o no murio.   
